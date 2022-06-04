@@ -4,7 +4,7 @@ import numpy as np
 import os,random
 
 
-### Path ###
+"""Path"""
 meter_1="1-meter/"
 meter_1 = meter_1 + random.choice(os.listdir(meter_1))
 meter_60="60 meter/"
@@ -14,7 +14,7 @@ meter_100 = meter_100 + random.choice(os.listdir(meter_100))
 meter_150="150 meter/"
 meter_150 = meter_100 + random.choice(os.listdir(meter_150))
 lendmark = "model/shape_predictor_68_face_landmarks.dat"
-### Path ###
+""" Path """
 
 def box(crop,titik, scale=5):
     masking= np.zeros_like(crop)
@@ -32,12 +32,12 @@ def box(crop,titik, scale=5):
 detector = dlib.get_frontal_face_detector()
 predictor =dlib.shape_predictor(lendmark)
 
-## Ganti Path sesuai yang diinginkan ##
-img = cv2.imread(meter_1) #ganti path di sini
+""" Ganti Path sesuai yang diinginkan """
+img = cv2.imread(meter_60) #ganti path di sini
 crop = img
 
-##khusus 150 meter uncomment perintah berikut
-#crop = img[600:5184, 1100:3456]  ##Shape image (3456, 5184, 3)
+"""khusus 150 meter uncomment perintah berikut"""
+#crop = crop[600:5184, 1100:3456]  ##Shape image (3456, 5184, 3)
 crop = cv2.resize(crop,(0,0), None,0.5,0.5)
 imgOriginal = crop.copy()
 
@@ -48,7 +48,7 @@ for face in faces:
     x1,y1= face.left(),face.top()
     x2,y2=face.right(),face.bottom()
 
-    #Perintah ini untuk menampilkan Bounding Box
+    """Perintah ini untuk menampilkan Bounding Box"""
     kotak=cv2.rectangle(crop,(x1,y1), (x2,y2), (0,255,255),4)
     kotak=kotak[y1:y2,x1:x2]
 
@@ -59,14 +59,14 @@ for face in faces:
         y=landmarks.part(n).y
         titik.append([x,y])
 
-        #kode ini untuk mengaktifkan landmarks
+        """kode ini untuk mengaktifkan landmarks"""
         #cv2.circle(imgOriginal,(x,y),5,(50,50,255),cv2.FILLED)
 
-        #untuk mengetahui Point
+        """untuk mengetahui Point"""
         #cv2.putText(imgOriginal, str(n),(x,y-10), cv2.FONT_HERSHEY_COMPLEX_SMALL, 3, (0,0,255),5)
 
     titik = np.array(titik)
-    print(len(titik))
+    #print(len(titik))
     faceBox = box(imgOriginal, titik)
     cv2.namedWindow('Hanya Wajah', cv2.WINDOW_KEEPRATIO)
     cv2.imshow("Hanya Wajah",faceBox)
