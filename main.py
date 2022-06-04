@@ -23,7 +23,6 @@ def box(crop,titik, scale=5):
     cv2.namedWindow('Masking', cv2.WINDOW_KEEPRATIO)
     cv2.imshow("Masking", crop)
 
-
     bbox = cv2.boundingRect(titik)
     x,y,w,h= bbox
     imgCrop = crop[y:y+h, x:x+w]
@@ -34,7 +33,7 @@ detector = dlib.get_frontal_face_detector()
 predictor =dlib.shape_predictor(lendmark)
 
 ## Ganti Path sesuai yang diinginkan ##
-img = cv2.imread(meter_100) #ganti path di sini
+img = cv2.imread(meter_1) #ganti path di sini
 crop = img
 
 ##khusus 150 meter uncomment perintah berikut
@@ -50,7 +49,9 @@ for face in faces:
     x2,y2=face.right(),face.bottom()
 
     #Perintah ini untuk menampilkan Bounding Box
-    #imgOriginal=cv2.rectangle(crop,(x1,y1), (x2,y2), (0,255,255),4)
+    kotak=cv2.rectangle(crop,(x1,y1), (x2,y2), (0,255,255),4)
+    kotak=kotak[y1:y2,x1:x2]
+
     landmarks = predictor(imgGray,face)
     titik=[]
     for n in range(68):
@@ -68,6 +69,11 @@ for face in faces:
     faceBox = box(imgOriginal, titik)
     cv2.namedWindow('Hanya Wajah', cv2.WINDOW_KEEPRATIO)
     cv2.imshow("Hanya Wajah",faceBox)
+
+    #Menampilkan Kotak
+    cv2.namedWindow('Hanya Kotak', cv2.WINDOW_KEEPRATIO)
+    cv2.imshow("Hanya Kotak",kotak)
+
 cv2.namedWindow('Gambar Keseluruhan', cv2.WINDOW_KEEPRATIO)
 cv2.imshow("Gambar Keseluruhan", imgOriginal)
 cv2.waitKey(0)
