@@ -66,6 +66,7 @@ for face in faces:
         #cv2.putText(imgOriginal, str(n),(x,y-10), cv2.FONT_HERSHEY_COMPLEX_SMALL, 3, (0,0,255),5)
 
     titik = np.array(titik)
+    print(len(titik))
     faceBox = box(imgOriginal, titik)
     cv2.namedWindow('Hanya Wajah', cv2.WINDOW_KEEPRATIO)
     cv2.imshow("Hanya Wajah",faceBox)
