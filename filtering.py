@@ -121,7 +121,7 @@ if __name__ == "__main__":
         cv2.waitKey(0)
     # dilation
     for i in range(0, 3):
-        dilated = cv2.dilate(img_filtered.copy(), None, iterations = i + 1)
+        dilated = cv2.dilate(eroded, None, iterations = i + 1)
         cv2.namedWindow(f"Dilasi {i+1} kali", cv2.WINDOW_KEEPRATIO)
         cv2.imshow(f"Dilasi {i+1} kali", dilated)
         cv2.waitKey(0)
@@ -130,7 +130,7 @@ if __name__ == "__main__":
     # Opening
     for kernelSize in kernelSizes:
         kernel = cv2.getStructuringElement(cv2.MORPH_RECT, kernelSize)
-        opening = cv2.morphologyEx(img_filtered, cv2.MORPH_OPEN, kernel)
+        opening = cv2.morphologyEx(dilated, cv2.MORPH_OPEN, kernel)
         cv2.namedWindow(f"Opening : ({kernelSize[0]}, {kernelSize[1]}", cv2.WINDOW_KEEPRATIO)
         cv2.imshow(f"Opening : ({kernelSize[0]}, {kernelSize[1]}", opening)
         cv2.waitKey(0)
