@@ -13,6 +13,9 @@ meter_100="100 meter/"
 meter_100 = meter_100 + random.choice(os.listdir(meter_100))
 meter_150="150 meter/"
 meter_150 = meter_100 + random.choice(os.listdir(meter_150))
+SetelahFiltering="images/HasilFiltering/"
+SetelahFiltering = SetelahFiltering +  random.choice(os.listdir(SetelahFiltering))
+
 lendmark = "model/shape_predictor_68_face_landmarks.dat"
 """ Path """
 
@@ -33,7 +36,7 @@ detector = dlib.get_frontal_face_detector()
 predictor =dlib.shape_predictor(lendmark)
 
 """ Ganti Path sesuai yang diinginkan """
-img = cv2.imread(meter_60) #ganti path di sini
+img = cv2.imread(SetelahFiltering) #ganti path di sini
 crop = img
 
 """khusus 150 meter uncomment perintah berikut"""
