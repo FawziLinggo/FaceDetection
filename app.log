@@ -1,3 +1,14 @@
-2022-07-09 20:44:26,793 - INFO - Menjalankan Program dengan jarak 100 meter
-2022-07-09 20:44:30,754 - INFO - Berhasil Melakukan filtering HomomorphicFilter
-2022-07-09 20:44:30,777 - INFO - Berhasil Menyimpan gambar filtering HomomorphicFilter pada : images/HasilFiltering/HomomorphicFilter-100-meter.jpg 
+2022-07-10 10:54:59,870 - INFO - Menjalankan Program dengan jarak 1 meter
+2022-07-10 10:55:05,840 - INFO - Berhasil Melakukan filtering HomomorphicFilter
+2022-07-10 10:55:06,121 - INFO - Berhasil Menyimpan gambar filtering HomomorphicFilter pada : images/HasilFiltering/HomomorphicFilter-1-meter.jpg 
+2022-07-10 10:55:08,009 - INFO - Sukses Membuat bounding box
+2022-07-10 10:55:08,031 - INFO - Menyimpan hasil bounding box
+2022-07-10 10:55:08,054 - INFO - Berhasil melakukan Morfologi erosi
+2022-07-10 10:55:08,416 - INFO - Menampilkan Morfologi erosi
+2022-07-10 10:55:08,417 - INFO - Berhasil melakukan Morfologi dilasi
+2022-07-10 10:55:08,432 - INFO - Menampilkan Morfologi dilasi
+2022-07-10 10:55:08,434 - INFO - Berhasil melakukan Morfologi opening
+2022-07-10 10:55:08,449 - INFO - Menampilkan Morfologi opening
+2022-07-10 10:55:08,450 - INFO - Berhasil melakukan Morfologi closing
+2022-07-10 10:55:08,465 - INFO - Menampilkan Morfologi opening
+2022-07-10 10:55:20,645 - INFO - Menjalankan Program Filtering, Morfologi dan Face Detection (hanya 1 Foto)
