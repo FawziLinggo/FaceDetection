@@ -1,5 +1,7 @@
 """ untuk Kebutuhan logging """
 import logging
+import sys
+
 logging.basicConfig(level=logging.INFO, filename='app.log', filemode='w', format='%(asctime)s - %(levelname)s - %(message)s')
 
 import os, random
@@ -40,14 +42,13 @@ path =""
 detector = dlib.get_frontal_face_detector()
 
 def run_program(path):
-    while(True):
         print("\n ++++++ Jenis-Jenis Foto ++++++ \n"
               "1. jarak 1 Meter \n"
               "2. jarak 60 Meter \n"
               "3. jarak 100 Meter \n"
               "4. jarak 150 Meter \n"
               "5. Exit Program \n"
-              " ++++++ Pilih sesuai angka (Harus Angka) ++++++"
+              " +++++++++++++++++++++++++++++++"
               )
         Hello = int(input("Masukkan Angka : "))
         if (Hello == 1):
@@ -71,7 +72,8 @@ def run_program(path):
             logging.info("Menjalankan Program dengan jarak 150 meter")
             homomorphic(path, subject, Hello)
         elif (Hello == 5):
-            break
+            logging.info("Clossing Program")
+            sys.exit()
         else:
             print(" ERROR : must number :)")
 
@@ -85,16 +87,23 @@ def homomorphic(path, subject,Hello, path_save_homomorpic=path_save_homomorpic):
             img_filtered = cv2.equalizeHist(img_filtered)
             logging.info("Berhasil Melakukan filtering HomomorphicFilter")
             path_save_homomorpic += subject
-
             cv2.imwrite(path_save_homomorpic, img_filtered)
             logging.info("Berhasil Menyimpan gambar filtering HomomorphicFilter pada : %s ", path_save_homomorpic)
 
-            """ Remove """
-            # cv2.namedWindow('Gambar Filtering', cv2.WINDOW_KEEPRATIO)
-            # cv2.imshow("Gambar Filtering", img_filtered)
-            # cv2.waitKey(0)
-
             face_detector(path_save_homomorpic,subject)
+        if(Hello==4):
+            img = cv2.imread(path)[:, :, 0]
+            homo_filter = HomomorphicFilter(a=0.75, b=1.25)
+            img_filtered = homo_filter.filter(I=img, filter_params=[25, 4])
+            img_filtered = cv2.equalizeHist(img_filtered)
+            img_filtered = img[1320:2552, 1640:3504]
+            logging.info("Berhasil Melakukan filtering HomomorphicFilter")
+            path_save_homomorpic += subject
+            cv2.imwrite(path_save_homomorpic, img_filtered)
+            logging.info("Berhasil Menyimpan gambar filtering HomomorphicFilter pada : %s ", path_save_homomorpic)
+            morfologi(path_save_homomorpic)
+
+
         else:
             img = cv2.imread(path)[:, :, 0]
             homo_filter = HomomorphicFilter(a=0.75, b=1.25)
@@ -103,16 +112,12 @@ def homomorphic(path, subject,Hello, path_save_homomorpic=path_save_homomorpic):
             img_filtered = img[1320:2552, 1640:3504]
             logging.info("Berhasil Melakukan filtering HomomorphicFilter")
             path_save_homomorpic += subject
-
             cv2.imwrite(path_save_homomorpic, img_filtered)
             logging.info("Berhasil Menyimpan gambar filtering HomomorphicFilter pada : %s ", path_save_homomorpic)
 
-            """ Remove """
-            # cv2.namedWindow('Gambar Filtering', cv2.WINDOW_KEEPRATIO)
-            # cv2.imshow("Gambar Filtering", img_filtered)
-            # cv2.waitKey(0)
             logging.info("Memanggil fungsi Face Detector")
             face_detector(path_save_homomorpic,subject)
+
 
 
     except:
@@ -123,18 +128,34 @@ def face_detector(path_save_homomorpic,subject, path_save_face_detection=path_sa
     crop = img
     imgGray = cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY)
     faces = detector(imgGray)
-
+    # face_cascade = cv2.CascadeClassifier('model/haarcascade_frontalface_default.xml')
+    # faces = face_cascade.detectMultiScale(imgGray, 1.1, 4)
+    # for (x, y, w, h) in faces:
+    #     kotak = cv2.rectangle(crop, (x, y), (x + w, y + h), (255, 0, 0), 2)
+    #     kotak_saja = kotak[y:h, x:w]
+    #
+    #     logging.info("Sukses Membuat bounding box")
+    #
+    #     path_save_face_detection_box = path_save_face_detection + "box-" + subject
+    #     path_save_face_detection += subject
+    #     cv2.imwrite(path_save_face_detection, kotak_saja)
+    #     cv2.imwrite(path_save_face_detection_box, kotak)
+    #     logging.info("Menyimpan hasil bounding box")
+    #     morfologi(path_save_face_detection)
+    #
     for face in faces:
         x1, y1 = face.left(), face.top()
         x2, y2 = face.right(), face.bottom()
 
         """Perintah ini untuk menampilkan Bounding Box"""
         kotak = cv2.rectangle(crop, (x1, y1), (x2, y2), (0, 255, 255), 4)
-        kotak = kotak[y1:y2, x1:x2]
+        kotak_saja = kotak[y1:y2, x1:x2]
         logging.info("Sukses Membuat bounding box")
 
+        path_save_face_detection_box = path_save_face_detection+ "box-" + subject
         path_save_face_detection += subject
-        cv2.imwrite(path_save_face_detection,kotak)
+        cv2.imwrite(path_save_face_detection,kotak_saja)
+        cv2.imwrite(path_save_face_detection_box,kotak)
         logging.info("Menyimpan hasil bounding box")
         morfologi(path_save_face_detection)
 
