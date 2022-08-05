@@ -40,6 +40,7 @@ path =""
 
 """ Path Detector """
 detector = dlib.get_frontal_face_detector()
+lendmark_path = "model/shape_predictor_68_face_landmarks.dat"
 
 def run_program(path):
         print("\n ++++++ Jenis-Jenis Foto ++++++ \n"
@@ -81,143 +82,162 @@ def run_program(path):
 def homomorphic(path, subject,Hello, path_save_homomorpic=path_save_homomorpic):
     try:
         if(Hello==1):
+            masking(path)
             img = cv2.imread(path)[:, :, 0]
             homo_filter = HomomorphicFilter(a=0.75, b=1.25)
-            img_filtered = homo_filter.filter(I=img, filter_params=[25, 4])
+            img_filtered = homo_filter.filter(I=img, filter_params=[25], filter='gaussian')
             img_filtered = cv2.equalizeHist(img_filtered)
             logging.info("Berhasil Melakukan filtering HomomorphicFilter")
             path_save_homomorpic += subject
             cv2.imwrite(path_save_homomorpic, img_filtered)
             logging.info("Berhasil Menyimpan gambar filtering HomomorphicFilter pada : %s ", path_save_homomorpic)
-
             face_detector(path_save_homomorpic,subject)
+
         if(Hello==4):
+            masking(path)
             img = cv2.imread(path)[:, :, 0]
             homo_filter = HomomorphicFilter(a=0.75, b=1.25)
             img_filtered = homo_filter.filter(I=img, filter_params=[25, 4])
             img_filtered = cv2.equalizeHist(img_filtered)
-            img_filtered = img[1320:2552, 1640:3504]
+            img_filtered = img_filtered[1320:2552, 1640:3504]
             logging.info("Berhasil Melakukan filtering HomomorphicFilter")
             path_save_homomorpic += subject
             cv2.imwrite(path_save_homomorpic, img_filtered)
             logging.info("Berhasil Menyimpan gambar filtering HomomorphicFilter pada : %s ", path_save_homomorpic)
             morfologi(path_save_homomorpic)
 
-
         else:
+            masking(path)
             img = cv2.imread(path)[:, :, 0]
             homo_filter = HomomorphicFilter(a=0.75, b=1.25)
-            img_filtered = homo_filter.filter(I=img, filter_params=[25, 4])
+            img_filtered = homo_filter.filter(I=img, filter_params=[25], filter='gaussian')
             img_filtered = cv2.equalizeHist(img_filtered)
-            img_filtered = img[1320:2552, 1640:3504]
+            img_filtered = img_filtered[1320:2552, 1640:3504]
             logging.info("Berhasil Melakukan filtering HomomorphicFilter")
             path_save_homomorpic += subject
-            cv2.imwrite(path_save_homomorpic, img_filtered)
+            cv2.imwrite(path_save_homomorpic, img)
             logging.info("Berhasil Menyimpan gambar filtering HomomorphicFilter pada : %s ", path_save_homomorpic)
 
             logging.info("Memanggil fungsi Face Detector")
             face_detector(path_save_homomorpic,subject)
 
-
-
     except:
         logging.error("Error saat melakukan Filtering : %s", OSError)
 
 def face_detector(path_save_homomorpic,subject, path_save_face_detection=path_save_face_detection):
-    img = cv2.imread(path_save_homomorpic)
-    crop = img
+    crop = cv2.imread(path_save_homomorpic)
     imgGray = cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY)
     faces = detector(imgGray)
-    # face_cascade = cv2.CascadeClassifier('model/haarcascade_frontalface_default.xml')
-    # faces = face_cascade.detectMultiScale(imgGray, 1.1, 4)
-    # for (x, y, w, h) in faces:
-    #     kotak = cv2.rectangle(crop, (x, y), (x + w, y + h), (255, 0, 0), 2)
-    #     kotak_saja = kotak[y:h, x:w]
+
+    # for face in faces:
+    #     x1, y1 = face.left(), face.top()
+    #     x2, y2 = face.right(), face.bottom()
     #
+    #     """Perintah ini untuk menampilkan Bounding Box"""
+    #     kotak = cv2.rectangle(crop, (x1, y1), (x2, y2), (0, 255, 255), 4)
+    #     kotak_saja = kotak[y1:y2, x1:x2]
     #     logging.info("Sukses Membuat bounding box")
-    #
-    #     path_save_face_detection_box = path_save_face_detection + "box-" + subject
-    #     path_save_face_detection += subject
-    #     cv2.imwrite(path_save_face_detection, kotak_saja)
-    #     cv2.imwrite(path_save_face_detection_box, kotak)
-    #     logging.info("Menyimpan hasil bounding box")
-    #     morfologi(path_save_face_detection)
-    #
+    predictor = dlib.shape_predictor(lendmark_path)
+
     for face in faces:
         x1, y1 = face.left(), face.top()
         x2, y2 = face.right(), face.bottom()
 
-        """Perintah ini untuk menampilkan Bounding Box"""
+        landmarks = predictor(imgGray, face)
+        titik = []
+        for n in range(68):
+            x = landmarks.part(n).x
+            y = landmarks.part(n).y
+            titik.append([x, y])
+
+        titik = np.array(titik)
+        titik = cv2.convexHull(titik)
+        faceBox = box(crop, titik)
+
+
         kotak = cv2.rectangle(crop, (x1, y1), (x2, y2), (0, 255, 255), 4)
         kotak_saja = kotak[y1:y2, x1:x2]
-        logging.info("Sukses Membuat bounding box")
 
         path_save_face_detection_box = path_save_face_detection+ "box-" + subject
         path_save_face_detection += subject
-        cv2.imwrite(path_save_face_detection,kotak_saja)
-        cv2.imwrite(path_save_face_detection_box,kotak)
+        cv2.imwrite(path_save_face_detection,faceBox)
+        cv2.imwrite(path_save_face_detection_box,kotak_saja)
         logging.info("Menyimpan hasil bounding box")
         morfologi(path_save_face_detection)
 
 def morfologi(path_save_face_detection):
     img = cv2.imread(path_save_face_detection, 0)
-    binr = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
-    kernel = np.ones((5, 5), np.uint8)
-
-    # invert the image
-    invert = cv2.bitwise_not(binr)
-
-    # erode the image
-    erosion = cv2.erode(invert, kernel, iterations=1)
-    logging.info("Berhasil melakukan Morfologi erosi")
-
+    binr = cv2.threshold(img, 0, 255, cv2.THRESH_OTSU + cv2.THRESH_BINARY)[1]
     plt.figure(figsize=(8, 7))
     plt.subplot(2, 2, 1)
-    plt.imshow(erosion, cmap='gray')
-    plt.title('erosion')
+    plt.imshow(binr, cmap='gray')
+    plt.title('Threshold')
     plt.axis('off')
-    logging.info("Menampilkan Morfologi erosi")
+    logging.info("Menampilkan Threshold Image")
 
-    # define the kernel
-    kernel = np.ones((3, 3), np.uint8)
-    invert = cv2.bitwise_not(binr)
-    dilation = cv2.dilate(invert, kernel, iterations=1)
-    logging.info("Berhasil melakukan Morfologi dilasi")
+    kernel = np.ones((25, 25), np.uint16)
+    dilation = cv2.dilate(binr, kernel, iterations=7)
+    logging.info("Berhasil melakukan Morfologi dilatasi dengan 7 kali perulangan")
 
-    # print the output
     plt.subplot(2, 2, 2)
     plt.imshow(dilation, cmap='gray')
     plt.title('dilation')
     plt.axis('off')
-    logging.info("Menampilkan Morfologi dilasi")
+    logging.info("Menampilkan Morfologi dilation")
 
-
-    # define the kernel
-    kernel = np.ones((3, 3), np.uint8)
-    opening = cv2.morphologyEx(binr, cv2.MORPH_OPEN,
-                               kernel, iterations=1)
-    logging.info("Berhasil melakukan Morfologi opening")
+    kernel1 = np.ones((25, 25), np.uint16)
+    closing = cv2.morphologyEx(dilation, cv2.MORPH_CLOSE, kernel1, iterations=10)
 
     # print the output
     plt.subplot(2, 2, 3)
-    plt.imshow(opening, cmap='gray')
-    plt.title('opening')
-    plt.axis('off')
-    logging.info("Menampilkan Morfologi opening")
-
-
-    kernel = np.ones((3, 3), np.uint8)
-
-    # opening the image
-    closing = cv2.morphologyEx(binr, cv2.MORPH_CLOSE, kernel, iterations=1)
-    logging.info("Berhasil melakukan Morfologi closing")
-
-
-    # print the output
-    plt.subplot(2, 2, 4)
     plt.imshow(closing, cmap='gray')
     plt.title('closing')
     plt.axis('off')
-    logging.info("Menampilkan Morfologi opening")
-    plt.show()
+    logging.info("Menampilkan Morfologi dilasi")
 
+    cv2.imwrite("images/Masking/Masking.png", closing)
+    img_masking_2= cv2.imread("images/Masking/masking2.png")
+    img_masking = cv2.imread("images/Masking/Masking.png")
+    img_masking_2 = cv2.resize(img_masking_2, img_masking.shape[1::-1])
+    src = cv2.bitwise_and(img_masking, img_masking_2)
+    # print the output
+    plt.subplot(2, 2, 4)
+    plt.imshow(src, cmap='gray')
+    plt.title('Masking')
+    plt.axis('off')
+    logging.info("Menampilkan Morfologi Masking")
+    plt.show()
+    logging.info("Clossing Program")
+    sys.exit()
+
+def box(img,titik, scale=5):
+    masking = np.zeros_like(img)
+    masking = cv2.fillPoly(masking, [titik], (255, 255, 255))
+    img = cv2.bitwise_and(img, masking)
+
+    bbox = cv2.boundingRect(titik)
+    x, y, w, h = bbox
+    imgimg = img[y:y + h, x:x + w]
+    imgimg = cv2.resize(imgimg, (0, 0), None, scale, scale)
+    return imgimg
+
+def masking(path):
+    imgGray = cv2.cvtColor(cv2.imread(path), cv2.COLOR_BGR2GRAY)
+    faces = detector(imgGray)
+    predictor = dlib.shape_predictor(lendmark_path)
+
+    for face in faces:
+        x1, y1 = face.left(), face.top()
+        x2, y2 = face.right(), face.bottom()
+
+        landmarks = predictor(imgGray, face)
+        titik = []
+        for n in range(68):
+            x = landmarks.part(n).x
+            y = landmarks.part(n).y
+            titik.append([x, y])
+
+        titik = np.array(titik)
+        titik = cv2.convexHull(titik)
+        faceBox = box(cv2.imread(path), titik)
+        cv2.imwrite("images/Masking/masking2.png",faceBox)
