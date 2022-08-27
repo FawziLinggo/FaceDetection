@@ -97,7 +97,7 @@ def homomorphic(path, subject,Hello, path_save_homomorpic=path_save_homomorpic):
             masking(path)
             img = cv2.imread(path)[:, :, 0]
             homo_filter = HomomorphicFilter(a=0.75, b=1.25)
-            img_filtered = homo_filter.filter(I=img, filter_params=[25, 4])
+            img_filtered = homo_filter.filter(I=img, filter_params=[25], filter='gaussian')
             img_filtered = cv2.equalizeHist(img_filtered)
             img_filtered = img_filtered[1320:2552, 1640:3504]
             logging.info("Berhasil Melakukan filtering HomomorphicFilter")
@@ -112,7 +112,7 @@ def homomorphic(path, subject,Hello, path_save_homomorpic=path_save_homomorpic):
             homo_filter = HomomorphicFilter(a=0.75, b=1.25)
             img_filtered = homo_filter.filter(I=img, filter_params=[25], filter='gaussian')
             img_filtered = cv2.equalizeHist(img_filtered)
-            img_filtered = img_filtered[1320:2552, 1640:3504]
+            img_filtered_ = img_filtered[1320:2552, 1640:3504]
             logging.info("Berhasil Melakukan filtering HomomorphicFilter")
             path_save_homomorpic += subject
             cv2.imwrite(path_save_homomorpic, img)
@@ -120,6 +120,7 @@ def homomorphic(path, subject,Hello, path_save_homomorpic=path_save_homomorpic):
 
             logging.info("Memanggil fungsi Face Detector")
             face_detector(path_save_homomorpic,subject)
+            #cv2.imwrite(path_save_homomorpic, img_filtered)
 
     except:
         logging.error("Error saat melakukan Filtering : %s", OSError)
@@ -129,14 +130,6 @@ def face_detector(path_save_homomorpic,subject, path_save_face_detection=path_sa
     imgGray = cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY)
     faces = detector(imgGray)
 
-    # for face in faces:
-    #     x1, y1 = face.left(), face.top()
-    #     x2, y2 = face.right(), face.bottom()
-    #
-    #     """Perintah ini untuk menampilkan Bounding Box"""
-    #     kotak = cv2.rectangle(crop, (x1, y1), (x2, y2), (0, 255, 255), 4)
-    #     kotak_saja = kotak[y1:y2, x1:x2]
-    #     logging.info("Sukses Membuat bounding box")
     predictor = dlib.shape_predictor(lendmark_path)
 
     for face in faces:
@@ -159,9 +152,11 @@ def face_detector(path_save_homomorpic,subject, path_save_face_detection=path_sa
         kotak_saja = kotak[y1:y2, x1:x2]
 
         path_save_face_detection_box = path_save_face_detection+ "box-" + subject
+        path_save_face_detection_kotak = path_save_face_detection+ "box-full-" + subject
         path_save_face_detection += subject
         cv2.imwrite(path_save_face_detection,faceBox)
         cv2.imwrite(path_save_face_detection_box,kotak_saja)
+        cv2.imwrite(path_save_face_detection_kotak, kotak)
         logging.info("Menyimpan hasil bounding box")
         morfologi(path_save_face_detection)
 
