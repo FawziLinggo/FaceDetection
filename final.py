@@ -1,7 +1,7 @@
 import cv2
 face_cascade = cv2.CascadeClassifier('model/haarcascade_frontalface_default.xml')
 
-path="100 meter/0004_100_n.JPG"
+path= "citra-nir/100 meter/0004_100_n.JPG"
 img_filtered = cv2.imread(path)
 #img_filtered = img_1[1320:2552, 1640:3504]
 
