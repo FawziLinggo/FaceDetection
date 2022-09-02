@@ -1,19 +1,23 @@
 """ untuk Kebutuhan logging """
 import logging
 import sys
-
-logging.basicConfig(level=logging.INFO, filename='app.log', filemode='w', format='%(asctime)s - %(levelname)s - %(message)s')
-from math import log10, sqrt
-
+import matplotlib.image as mpimg
 import os, random
 import cv2
 import dlib
 import numpy as np
 import matplotlib.pyplot as plt
-
-
+from math import log10, sqrt
 """ import Class HomomorphicFilter """
 from filtering import HomomorphicFilter
+
+
+logging.basicConfig(level=logging.INFO, filename='app.log', filemode='w', format='%(asctime)s - %(levelname)s - %(message)s')
+
+
+
+
+
 
 """ Path Penyimpanan Homomorpich"""
 path_save_homomorpic = "images/HasilFiltering/HomomorphicFilter-"
@@ -38,14 +42,14 @@ def run_program(path):
               "3. Exit Program \n"
               " +++++++++++++++++++++++++++++++"
               )
-        Hello = int(input("Masukkan Angka : "))
-        if (Hello == 1):
+        Hello_ = int(input("Masukkan Angka : "))
+        if (Hello_ == 1):
             a = "citra-nir/"
 
-        elif (Hello == 2):
+        elif (Hello_ == 2):
             a = "citra-vis/"
 
-        elif (Hello == 2):
+        elif (Hello_ == 2):
             logging.info("Clossing Program")
             sys.exit()
         else:
@@ -81,7 +85,7 @@ def run_program(path):
             subject = "1-meter.jpg"
             path += meter_1
             logging.info("Menjalankan Program dengan jarak 1 meter")
-            homomorphic(path, subject, Hello)
+            homomorphic(path, subject, Hello,Hello_)
 
         elif (Hello == 2):
             subject = "60-meter.jpg"
@@ -109,7 +113,7 @@ def run_program(path):
             print(" ERROR : must number :)")
 
 
-def homomorphic(path, subject,Hello, path_save_homomorpic=path_save_homomorpic):
+def homomorphic(path, subject,Hello,Hello_=False, path_save_homomorpic=path_save_homomorpic):
     try:
         if(Hello==1):
             masking(path)
@@ -123,6 +127,19 @@ def homomorphic(path, subject,Hello, path_save_homomorpic=path_save_homomorpic):
             logging.info("Berhasil Menyimpan gambar filtering HomomorphicFilter pada : %s ", path_save_homomorpic)
             face_detector(path_save_homomorpic,subject)
             sys.exit()
+
+        if(Hello==1 & Hello_ ==2):
+            masking(path)
+            img = cv2.imread(path)[:, :, 0]
+            homo_filter = HomomorphicFilter(a=0.75, b=1.25)
+            img_filtered = homo_filter.filter(I=img, filter_params=[25], filter='gaussian')
+            img_filtered = cv2.equalizeHist(img_filtered)
+            # img_filtered = img_filtered[1320:2552, 1640:3504]
+            logging.info("Berhasil Melakukan filtering HomomorphicFilter")
+            path_save_homomorpic += subject
+            cv2.imwrite(path_save_homomorpic, img_filtered)
+            logging.info("Berhasil Menyimpan gambar filtering HomomorphicFilter pada : %s ", path_save_homomorpic)
+            morfologi(path_save_homomorpic)
 
         if(Hello==4):
             masking(path)
@@ -228,18 +245,24 @@ def morfologi(path_save_face_detection):
         img_masking = cv2.imread("images/Masking/Masking.png")
         img_masking_2 = cv2.resize(img_masking_2, img_masking.shape[1::-1])
         src = cv2.bitwise_and(img_masking, img_masking_2)
+
+        # show image real for subplot (2,2,4)
+        cv2.imwrite("images/Masking/Masking3.png", src)
+        show_ = mpimg.imread("images/Masking/Masking3.png")
+
+
         value = PSNR(img_masking_2, src)
         if value == 100:
             # print the output
             plt.subplot(2, 2, 4)
-            plt.imshow(src, cmap='gray')
+            plt.imshow(show_)
             plt.title('PSNR : %.2f, MSE : 0 ' %value)
             plt.axis('off')
             logging.info("Menampilkan Morfologi Masking")
         else:
             plt.subplot(2, 2, 4)
-            plt.imshow(src, cmap='gray')
-            plt.title('PSNR : %.2f, MSE : %.2f ' %(value[0],value[1]))
+            plt.imshow(show_)
+            plt.title('PSNR : %.2f, MSE : %s ' %(value[0],value[1]))
             plt.axis('off')
             logging.info("Menampilkan Morfologi Masking")
 
@@ -248,8 +271,8 @@ def morfologi(path_save_face_detection):
         sys.exit()
     except:
         try:
-            print("tes")
-            #os.remove("images/Masking/masking2.png")
+            # print("tes")
+            os.remove("images/Masking/masking2.png")
         except:
             logging.info("tidak ada file masking2.png")
             plt.close()
