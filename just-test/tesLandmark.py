@@ -13,7 +13,7 @@ meter_100="100 meter/"
 meter_100 = meter_100 + random.choice(os.listdir(meter_100))
 meter_150="150 meter/"
 meter_150 = meter_100 + random.choice(os.listdir(meter_150))
-lendmark_path = "model/shape_predictor_68_face_landmarks.dat"
+lendmark_path = "../model/shape_predictor_68_face_landmarks.dat"
 ### Path ###
 
 def box(img,titik, scale=5, masked=False, cropped=True):

@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 
-img2 = cv2.imread("images/HasilFiltering/FaceDetection-1-meter.jpg")
+img2 = cv2.imread("../images/HasilFiltering/FaceDetection-1-meter.jpg")
 
 
 imgGray2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
