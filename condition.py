@@ -293,8 +293,8 @@ def masking(path):
         predictor = dlib.shape_predictor(lendmark_path)
 
         for face in faces:
-            x1, y1 = face.left(), face.top()
-            x2, y2 = face.right(), face.bottom()
+            # x1, y1 = face.left(), face.top()
+            # x2, y2 = face.right(), face.bottom()
 
             landmarks = predictor(imgGray, face)
             titik = []

@@ -1,12 +1,12 @@
-2022-09-02 14:00:56,448 - INFO - tidak ada file masking2.png
-2022-09-02 14:00:58,787 - INFO - Menjalankan Program dengan jarak 1 meter
-2022-09-02 14:01:05,144 - INFO - Berhasil Melakukan filtering HomomorphicFilter
-2022-09-02 14:01:05,323 - INFO - Berhasil Menyimpan gambar filtering HomomorphicFilter pada : images/HasilFiltering/HomomorphicFilter-1-meter.jpg 
-2022-09-02 14:01:08,323 - INFO - Menyimpan hasil bounding box
-2022-09-02 14:01:09,328 - INFO - Menampilkan Threshold Image
-2022-09-02 14:01:09,477 - INFO - Berhasil melakukan Morfologi dilatasi dengan 7 kali perulangan
-2022-09-02 14:01:09,562 - INFO - Menampilkan Morfologi dilation
-2022-09-02 14:01:10,067 - INFO - Menampilkan Morfologi dilasi
-2022-09-02 14:01:10,808 - INFO - Menampilkan Morfologi Masking
-2022-09-02 14:01:18,041 - INFO - Clossing Program
-2022-09-02 14:01:18,055 - ERROR - Error saat melakukan Filtering : <class 'OSError'>
+2022-09-02 14:38:26,643 - INFO - tidak ada file masking2.png
+2022-09-02 14:38:30,352 - INFO - Menjalankan Program dengan jarak 1 meter
+2022-09-02 14:38:38,285 - INFO - Berhasil Melakukan filtering HomomorphicFilter
+2022-09-02 14:38:38,482 - INFO - Berhasil Menyimpan gambar filtering HomomorphicFilter pada : images/HasilFiltering/HomomorphicFilter-1-meter.jpg 
+2022-09-02 14:38:41,574 - INFO - Menyimpan hasil bounding box
+2022-09-02 14:38:42,650 - INFO - Menampilkan Threshold Image
+2022-09-02 14:38:42,813 - INFO - Berhasil melakukan Morfologi dilatasi dengan 7 kali perulangan
+2022-09-02 14:38:42,903 - INFO - Menampilkan Morfologi dilation
+2022-09-02 14:38:43,462 - INFO - Menampilkan Morfologi dilasi
+2022-09-02 14:38:44,292 - INFO - Menampilkan Morfologi Masking
+2022-09-02 14:39:03,048 - INFO - Clossing Program
+2022-09-02 14:39:03,063 - ERROR - Error saat melakukan Filtering : <class 'OSError'>
