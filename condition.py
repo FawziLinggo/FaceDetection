@@ -3,6 +3,7 @@ import logging
 import sys
 
 logging.basicConfig(level=logging.INFO, filename='app.log', filemode='w', format='%(asctime)s - %(levelname)s - %(message)s')
+from math import log10, sqrt
 
 import os, random
 import cv2
@@ -227,10 +228,13 @@ def morfologi(path_save_face_detection):
         img_masking = cv2.imread("images/Masking/Masking.png")
         img_masking_2 = cv2.resize(img_masking_2, img_masking.shape[1::-1])
         src = cv2.bitwise_and(img_masking, img_masking_2)
+        value, mse = PSNR(img_masking_2, src)
+
         # print the output
         plt.subplot(2, 2, 4)
         plt.imshow(src, cmap='gray')
-        plt.title('Masking')
+        # plt.title(f"PSNR value is {value} dB",f"MSE value is {mse} ")
+        plt.title('PSNR : %s, MSE : %s' %(value,mse))
         plt.axis('off')
         logging.info("Menampilkan Morfologi Masking")
         plt.show()
@@ -238,6 +242,7 @@ def morfologi(path_save_face_detection):
         sys.exit()
     except:
         try:
+            #print("tes")
             os.remove("images/Masking/masking2.png")
         except:
             logging.info("tidak ada file masking2.png")
@@ -311,4 +316,10 @@ def masking(path):
         print("gagal prediksi wajah")
 
 
-
+def PSNR(original, compressed):
+    mse = np.mean((original - compressed) ** 2)
+    if (mse == 0):
+        return 100
+    max_pixel = 255.0
+    psnr = 20 * log10(max_pixel / sqrt(mse))
+    return psnr, mse
