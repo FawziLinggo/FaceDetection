@@ -228,22 +228,28 @@ def morfologi(path_save_face_detection):
         img_masking = cv2.imread("images/Masking/Masking.png")
         img_masking_2 = cv2.resize(img_masking_2, img_masking.shape[1::-1])
         src = cv2.bitwise_and(img_masking, img_masking_2)
-        value, mse = PSNR(img_masking_2, src)
+        value = PSNR(img_masking_2, src)
+        if value == 100:
+            # print the output
+            plt.subplot(2, 2, 4)
+            plt.imshow(src, cmap='gray')
+            plt.title('PSNR : %.2f, MSE : 0 ' %value)
+            plt.axis('off')
+            logging.info("Menampilkan Morfologi Masking")
+        else:
+            plt.subplot(2, 2, 4)
+            plt.imshow(src, cmap='gray')
+            plt.title('PSNR : %.2f, MSE : %.2f ' %(value[0],value[1]))
+            plt.axis('off')
+            logging.info("Menampilkan Morfologi Masking")
 
-        # print the output
-        plt.subplot(2, 2, 4)
-        plt.imshow(src, cmap='gray')
-        # plt.title(f"PSNR value is {value} dB",f"MSE value is {mse} ")
-        plt.title('PSNR : %s, MSE : %s' %(value,mse))
-        plt.axis('off')
-        logging.info("Menampilkan Morfologi Masking")
         plt.show()
         logging.info("Clossing Program")
         sys.exit()
     except:
         try:
-            #print("tes")
-            os.remove("images/Masking/masking2.png")
+            print("tes")
+            #os.remove("images/Masking/masking2.png")
         except:
             logging.info("tidak ada file masking2.png")
             plt.close()
@@ -318,6 +324,7 @@ def masking(path):
 
 def PSNR(original, compressed):
     mse = np.mean((original - compressed) ** 2)
+    print(mse)
     if (mse == 0):
         return 100
     max_pixel = 255.0
