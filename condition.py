@@ -118,13 +118,13 @@ def homomorphic(path, subject,Hello,Hello_=False, path_save_homomorpic=path_save
         if(Hello==1 & Hello_ ==2):
             masking(path)
             img = cv2.imread(path)[:, :, 0]
-            homo_filter = HomomorphicFilter(a=0.75, b=1.25)
-            img_filtered = homo_filter.filter(I=img, filter_params=[25], filter='gaussian')
-            img_filtered = cv2.equalizeHist(img_filtered)
+            #homo_filter = HomomorphicFilter(a=0.75, b=1.25)
+            #img_filtered = homo_filter.filter(I=img, filter_params=[25], filter='gaussian')
+            #img_filtered = cv2.equalizeHist(img_filtered)
             # img_filtered = img_filtered[1320:2552, 1640:3504]
             logging.info("Berhasil Melakukan filtering HomomorphicFilter")
             path_save_homomorpic += subject
-            cv2.imwrite(path_save_homomorpic, img_filtered)
+            cv2.imwrite(path_save_homomorpic, img)
             logging.info("Berhasil Menyimpan gambar filtering HomomorphicFilter pada : %s ", path_save_homomorpic)
             morfologi(path_save_homomorpic)
 
@@ -137,7 +137,7 @@ def homomorphic(path, subject,Hello,Hello_=False, path_save_homomorpic=path_save
                 img_filtered = cv2.equalizeHist(img_filtered)
                 logging.info("Berhasil Melakukan filtering HomomorphicFilter")
                 path_save_homomorpic += subject
-                cv2.imwrite(path_save_homomorpic, img_filtered)
+                cv2.imwrite(path_save_homomorpic, img)
                 logging.info("Berhasil Menyimpan gambar filtering HomomorphicFilter pada : %s ", path_save_homomorpic)
                 face_detector(path_save_homomorpic,subject)
                 sys.exit()
