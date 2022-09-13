@@ -11,25 +11,51 @@ from math import log10, sqrt
 """ import Class HomomorphicFilter """
 from filtering import HomomorphicFilter
 
+# ---------------------------------- PENJELASAN ----------------------------------
+#
+#   Ini adalah perintah basic logging dengan format :
+#   %(asctime)s - %(levelname)s - %(message)s
+#
+#   Dokumentasi bisa dibaca disini :
+#   https://docs.python.org/3/library/logging.html
+#
+# --------------------------------------------------------------------------------
+logging.basicConfig(level=logging.INFO, filename='app.log', filemode='w',
+                    format='%(asctime)s - %(levelname)s - %(message)s')
 
-logging.basicConfig(level=logging.INFO, filename='app.log', filemode='w', format='%(asctime)s - %(levelname)s - %(message)s')
-
-
-
-
-
-
-""" Path Penyimpanan Homomorpich"""
+# ---------------------------------- PENJELASAN ----------------------------------
+#
+#   :path:  Untuk Path Foto yang akan mengembalikan setiap fungsi (path)
+#   :path_save_homomorpic: Tempat menyimpan hasil filtering hormomorphic
+#   :path_save_face_detection: Tempat menyimpan hasil face detection
+#   :detector: Tempat mengambil file dlib
+#   :lendmark_path: Tempat mengambil file landmarks.dat
+#
+# --------------------------------------------------------------------------------
+path =""
 path_save_homomorpic = "images/HasilFiltering/HomomorphicFilter-"
 path_save_face_detection = "images/HasilFiltering/FaceDetection-"
-
-""" Untuk Path Foto """
-path =""
-
-""" Path Detector """
 detector = dlib.get_frontal_face_detector()
 lendmark_path = "model/shape_predictor_68_face_landmarks.dat"
 
+
+# ---------------------------------- PENJELASAN ----------------------------------
+#
+#   fungsi run_program() akan mengembalikan nilai dari variabel path yang
+#   akan digunakan untuk menginisialisasi path kosong. selanjutnya dilakukan
+#   try except, dimana saat menjalankan program ini dia akan mengeceh apakan ada
+#   file masking2.png, jika ada maka akan menghapus terlebih dahulu. jika tidak
+#   maka akan melanjutkan program dengan memberikan info pada log.
+#
+#   selanjutnya kita program akan meminta input yang akan diinisialisasi oleh
+#   variabel "Hello_". untuk jika kita memasukkan (meng-input) nilai 1 maka akan
+#   digunakan citra foto Nir sedangkan nilai 2 akan menggunakan citra asli. dan 3
+#   untuk exit.
+#
+#   Kemudian akan diminta untuk menginput data foto dari jarak berapa, mulai dari
+#   1, 60 hingga 100 meter. yang akan diinisialisasi dengan variabel "Hello"
+#
+# --------------------------------------------------------------------------------
 def run_program(path):
         try:
             os.remove("images/Masking/masking2.png")
@@ -55,20 +81,18 @@ def run_program(path):
         else:
             print(" ERROR : must number :)")
 
-        """ Path """
-        """ 1 Meter """
+        # ---------------------------------- PENJELASAN ----------------------------------
+        #
+        #   Ini adalah inisialisasi jarak, masing masing jarak akan menentukan directorinya
+        #   dilanjutkan dengan memilih secara acak file yang ada dalam directory tersebut
+        #
+        # --------------------------------------------------------------------------------
         meter_1 = a+"1-meter/"
         meter_1 = meter_1 + random.choice(os.listdir(meter_1))
-
-        """ 60 Meter """
         meter_60 = a+"60 meter/"
         meter_60 = meter_60 + random.choice(os.listdir(meter_60))
-
-        """ 100 Meter """
         meter_100 = a + "100 meter/"
         meter_100 = meter_100 + random.choice(os.listdir(meter_100))
-
-        """ 150 Meter """
         meter_150 = a+"150 meter/"
         meter_150 = meter_150 + random.choice(os.listdir(meter_150))
 
@@ -81,6 +105,18 @@ def run_program(path):
               " +++++++++++++++++++++++++++++++"
               )
         Hello = int(input("Masukkan Angka : "))
+
+        # ---------------------------------- PENJELASAN ----------------------------------
+        #
+        #   Setelah menentukan jarak berapa maka nilai Hello akan dilakukan statement if-
+        #   else, jika 1 maka... jika 2 maka... fan seterusnya. di dalam kondisi tersebut
+        #   sudah termasuk didalamnya untuk menjalankan fungsi homomorphic() yang ada di
+        #   dalam program ini, ayang akan mengembalikan dilai dari path, subject, Hello. dimana
+        #   subject yang akan dighunakan sebagau nama foto (name file) yang mewakili jarak foto
+        #   tersebut
+        #
+        # --------------------------------------------------------------------------------
+
         if (Hello == 1):
             subject = "1-meter.jpg"
             path += meter_1
@@ -113,7 +149,49 @@ def run_program(path):
             print(" ERROR : must number :)")
 
 
+# ---------------------------------- PENJELASAN ----------------------------------
+#
+#   Ini adalah fungi homomorphic() untuk melakukan proses homomorphic filter, dimulai
+#   dengan membaca program menggunakan cv2.imread selanjutnya di ubah menjadi
+#   grayscale[:,:,0] dan selanjutnya adalah pengembalian ke dalam class HomomorphicFilter()
+#   yang akan menginisiaisasi nilai a dan b. dimana nilai a dan b adalah float yang digunakan
+#   untuk emphasis filter dengan rumus :
+#    H = a + b*H
+#
+#   Langkah selanjutnya adalah pemanggilan kembali fungsi filter() pada kelas HomomorphicFilter()
+#   ini merupakan Metode untuk menerapkan filter homomorfik pada gambar (image).
+#
+#   def filter(self, I, filter_params, filter='butterworth', H=None):
+#
+#   dengan Atribut:
+#   I: Gambar saluran tunggal
+#   filter_params: Parameter yang akan digunakan pada filter:
+#
+#       1. Butterworth:
+#           filter_params[0]: Frekuensi batas
+#           filter_params[1]: Urutan filter
+#       2. gaussian:
+#           filter_params[0]: Frekuensi batas
+#           filter: Pilih filter, opsi:
+#                   butterworth
+#                   gaussian
+#                   external
+#       H: Digunakan untuk melewati filter eksternal
+#
+#   fungsi homomorphic() akan mengembalikan nilai variabel berikut :
+#     :param path:
+#     :param subject:
+#     :param Hello:
+#     :param Hello_:
+#     :param path_save_homomorpic:
+#     :return:
+#
+#   Hasil dari path_save_homomorpic akan menjadi nilai return untuk fungsi
+#   morfologi() pada kodingan ini
+# --------------------------------------------------------------------------------
+
 def homomorphic(path, subject,Hello,Hello_=False, path_save_homomorpic=path_save_homomorpic):
+
     try:
         if(Hello==1 & Hello_ ==2):
             masking(path)
@@ -174,6 +252,18 @@ def homomorphic(path, subject,Hello,Hello_=False, path_save_homomorpic=path_save
     except:
         logging.error("Error saat melakukan Filtering : %s", OSError)
 
+# ---------------------------------- PENJELASAN ----------------------------------
+#
+#   Fungsi face_detector adalah fungsi untuk mendeteksi wajah dengan mengambil path
+#   dari path_save_homomorpic yang selanjutnya diubah menjadi Gray, kemudial akan
+#   dilakukan prediksi wajah dengan fungsi detector dari dlib selanjutnya dilakukan
+#   perulangan yang akan menginisialisasi face dengan menciptakan bounding box
+#   x1,y1, x2,y2 seperti pada kodingan. serta memanggil fungsi landmark untuk
+#   menciptakan titik croping pada wajah yang sudah terdeteksi menggunakan bounding
+#   box sebelumnya. selanjutnya fungsi cv2.imwrite hanya untuk melakukan penyimpanan
+#   gambar hasil deteksi wajah.
+#
+# --------------------------------------------------------------------------------
 def face_detector(path_save_homomorpic,subject, path_save_face_detection=path_save_face_detection):
     crop = cv2.imread(path_save_homomorpic)
     imgGray = cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY)
@@ -209,6 +299,32 @@ def face_detector(path_save_homomorpic,subject, path_save_face_detection=path_sa
         logging.info("Menyimpan hasil bounding box")
         morfologi(path_save_face_detection)
 
+# ---------------------------------- PENJELASAN ----------------------------------
+#
+#   Fungsi morfologi() akan memanggil path path_save_face_detection, selanjutnya akan
+#   dilakukan beberapa fungsi morfologi citra di antaranya threshold yang menggunakan
+#   cv2.THRESH_OTSU + cv2.THRESH_BINARY, kemudian  cv2.dilate atau dilatasi yang menggunakan
+#   kernel :
+#       np.ones((25, 25), np.uint16)
+#
+#   kemudian dilakukan perulangan sebanyak 7 kali, np.ones() adalaha function mengembalikan
+#   array baru dengan bentuk dan tipe data tertentu, di mana nilai elemen diatur ke 1.
+#   Fungsi ini sangat mirip dengan fungsi numpy zeros().
+#
+#   selanjutnya dilakukan morfologi dengan closing, dimana kernel yang digunakan adalah
+#   kernel :
+#       np.ones((25, 25), np.uint16)
+#   kemudian dilakukan perulangan 10 kali dengan memanggil nilai cv2.MORPH_CLOSE
+#
+#   terakhir hanya menampilkan gambar dengan subplot (2,2,(1-4))
+#
+#       --------------------+--------------------
+#           Gambar 1        |   Gambar 2
+#       --------------------+--------------------
+#           Gambar 3        |   Gambar 4
+#       --------------------+--------------------
+#
+# --------------------------------------------------------------------------------
 def morfologi(path_save_face_detection):
     img = cv2.imread(path_save_face_detection, 0)
     binr = cv2.threshold(img, 0, 255, cv2.THRESH_OTSU + cv2.THRESH_BINARY)[1]
