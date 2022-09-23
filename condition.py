@@ -33,7 +33,7 @@ logging.basicConfig(level=logging.INFO, filename='app.log', filemode='w',
 #
 # --------------------------------------------------------------------------------
 path =""
-path_save_homomorpic = "images/HasilFiltering/HomomorphicFilter-"
+path_save_homomorpic = "images/HasilFiltering/grayscale-"
 path_save_face_detection = "images/HasilFiltering/FaceDetection-"
 detector = dlib.get_frontal_face_detector()
 lendmark_path = "model/shape_predictor_68_face_landmarks.dat"
@@ -196,10 +196,6 @@ def homomorphic(path, subject,Hello,Hello_=False, path_save_homomorpic=path_save
         if(Hello==1 & Hello_ ==2):
             masking(path)
             img = cv2.imread(path)[:, :, 0]
-            #homo_filter = HomomorphicFilter(a=0.75, b=1.25)
-            #img_filtered = homo_filter.filter(I=img, filter_params=[25], filter='gaussian')
-            #img_filtered = cv2.equalizeHist(img_filtered)
-            # img_filtered = img_filtered[1320:2552, 1640:3504]
             logging.info("Berhasil Melakukan filtering HomomorphicFilter")
             path_save_homomorpic += subject
             cv2.imwrite(path_save_homomorpic, img)
@@ -210,9 +206,6 @@ def homomorphic(path, subject,Hello,Hello_=False, path_save_homomorpic=path_save
             if(Hello==1):
                 masking(path)
                 img = cv2.imread(path)[:, :, 0]
-                homo_filter = HomomorphicFilter(a=0.75, b=1.25)
-                img_filtered = homo_filter.filter(I=img, filter_params=[25], filter='gaussian')
-                img_filtered = cv2.equalizeHist(img_filtered)
                 logging.info("Berhasil Melakukan filtering HomomorphicFilter")
                 path_save_homomorpic += subject
                 cv2.imwrite(path_save_homomorpic, img)
@@ -223,23 +216,15 @@ def homomorphic(path, subject,Hello,Hello_=False, path_save_homomorpic=path_save
             if(Hello==4):
                 masking(path)
                 img = cv2.imread(path)[:, :, 0]
-                homo_filter = HomomorphicFilter(a=0.75, b=1.25)
-                img_filtered = homo_filter.filter(I=img, filter_params=[25], filter='gaussian')
-                img_filtered = cv2.equalizeHist(img_filtered)
-                img_filtered = img_filtered[1320:2552, 1640:3504]
                 logging.info("Berhasil Melakukan filtering HomomorphicFilter")
                 path_save_homomorpic += subject
-                cv2.imwrite(path_save_homomorpic, img_filtered)
+                cv2.imwrite(path_save_homomorpic, img)
                 logging.info("Berhasil Menyimpan gambar filtering HomomorphicFilter pada : %s ", path_save_homomorpic)
                 morfologi(path_save_homomorpic)
 
             else:
                 masking(path)
                 img = cv2.imread(path)[:, :, 0]
-                homo_filter = HomomorphicFilter(a=0.75, b=1.25)
-                img_filtered = homo_filter.filter(I=img, filter_params=[25], filter='gaussian')
-                img_filtered = cv2.equalizeHist(img_filtered)
-                img_filtered_ = img_filtered[1320:2552, 1640:3504]
                 logging.info("Berhasil Melakukan filtering HomomorphicFilter")
                 path_save_homomorpic += subject
                 cv2.imwrite(path_save_homomorpic, img)
