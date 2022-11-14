@@ -8,6 +8,7 @@ import dlib
 import numpy as np
 import matplotlib.pyplot as plt
 from math import log10, sqrt
+
 """ import Class HomomorphicFilter """
 from filtering import HomomorphicFilter
 
@@ -32,7 +33,7 @@ logging.basicConfig(level=logging.INFO, filename='app.log', filemode='w',
 #   :lendmark_path: Tempat mengambil file landmarks.dat
 #
 # --------------------------------------------------------------------------------
-path =""
+path = ""
 path_save_homomorpic = "images/HasilFiltering/grayscale-"
 path_save_face_detection = "images/HasilFiltering/FaceDetection-"
 detector = dlib.get_frontal_face_detector()
@@ -57,96 +58,96 @@ lendmark_path = "model/shape_predictor_68_face_landmarks.dat"
 #
 # --------------------------------------------------------------------------------
 def run_program(path):
-        try:
-            os.remove("images/Masking/masking2.png")
-        except:
-            logging.info("tidak ada file masking2.png")
+    try:
+        os.remove("images/Masking/masking2.png")
+    except:
+        logging.info("tidak ada file masking2.png")
 
-        print("\n ++++++ Jenis-Jenis Foto ++++++ \n"
-              "1. Citra Nir\n"
-              "2. Citra Vis \n"
-              "3. Exit Program \n"
-              " +++++++++++++++++++++++++++++++"
-              )
-        Hello_ = int(input("Masukkan Angka : "))
-        if (Hello_ == 1):
-            a = "citra-nir/"
+    print("\n ++++++ Jenis-Jenis Foto ++++++ \n"
+          "1. Citra Nir\n"
+          "2. Citra Vis \n"
+          "3. Exit Program \n"
+          " +++++++++++++++++++++++++++++++"
+          )
+    Hello_ = int(input("Masukkan Angka : "))
+    if (Hello_ == 1):
+        a = "citra-nir/"
 
-        elif (Hello_ == 2):
-            a = "citra-vis/"
+    elif (Hello_ == 2):
+        a = "citra-vis/"
 
-        elif (Hello_ == 2):
-            logging.info("Clossing Program")
-            sys.exit()
-        else:
-            print(" ERROR : must number :)")
+    elif (Hello_ == 2):
+        logging.info("Clossing Program")
+        sys.exit()
+    else:
+        print(" ERROR : must number :)")
 
-        # ---------------------------------- PENJELASAN ----------------------------------
-        #
-        #   Ini adalah inisialisasi jarak, masing masing jarak akan menentukan directorinya
-        #   dilanjutkan dengan memilih secara acak file yang ada dalam directory tersebut
-        #
-        # --------------------------------------------------------------------------------
-        meter_1 = a+"1-meter/"
-        meter_1 = meter_1 + random.choice(os.listdir(meter_1))
-        meter_60 = a+"60 meter/"
-        meter_60 = meter_60 + random.choice(os.listdir(meter_60))
-        meter_100 = a + "100 meter/"
-        meter_100 = meter_100 + random.choice(os.listdir(meter_100))
-        meter_150 = a+"150 meter/"
-        meter_150 = meter_150 + random.choice(os.listdir(meter_150))
+    # ---------------------------------- PENJELASAN ----------------------------------
+    #
+    #   Ini adalah inisialisasi jarak, masing masing jarak akan menentukan directorinya
+    #   dilanjutkan dengan memilih secara acak file yang ada dalam directory tersebut
+    #
+    # --------------------------------------------------------------------------------
+    meter_1 = a + "1-meter/"
+    meter_1 = meter_1 + random.choice(os.listdir(meter_1))
+    meter_60 = a + "60 meter/"
+    meter_60 = meter_60 + random.choice(os.listdir(meter_60))
+    meter_100 = a + "100 meter/"
+    meter_100 = meter_100 + random.choice(os.listdir(meter_100))
+    meter_150 = a + "150 meter/"
+    meter_150 = meter_150 + random.choice(os.listdir(meter_150))
 
-        print("\n ++++++ Jenis-Jenis Foto ++++++ \n"
-              "1. jarak 1 Meter \n"
-              "2. jarak 60 Meter \n"
-              "3. jarak 100 Meter \n"
-              "4. jarak 150 Meter \n"
-              "5. Exit Program \n"
-              " +++++++++++++++++++++++++++++++"
-              )
-        Hello = int(input("Masukkan Angka : "))
+    print("\n ++++++ Jenis-Jenis Foto ++++++ \n"
+          "1. jarak 1 Meter \n"
+          "2. jarak 60 Meter \n"
+          "3. jarak 100 Meter \n"
+          "4. jarak 150 Meter \n"
+          "5. Exit Program \n"
+          " +++++++++++++++++++++++++++++++"
+          )
+    Hello = int(input("Masukkan Angka : "))
 
-        # ---------------------------------- PENJELASAN ----------------------------------
-        #
-        #   Setelah menentukan jarak berapa maka nilai Hello akan dilakukan statement if-
-        #   else, jika 1 maka... jika 2 maka... fan seterusnya. di dalam kondisi tersebut
-        #   sudah termasuk didalamnya untuk menjalankan fungsi homomorphic() yang ada di
-        #   dalam program ini, ayang akan mengembalikan dilai dari path, subject, Hello. dimana
-        #   subject yang akan dighunakan sebagau nama foto (name file) yang mewakili jarak foto
-        #   tersebut
-        #
-        # --------------------------------------------------------------------------------
+    # ---------------------------------- PENJELASAN ----------------------------------
+    #
+    #   Setelah menentukan jarak berapa maka nilai Hello akan dilakukan statement if-
+    #   else, jika 1 maka... jika 2 maka... fan seterusnya. di dalam kondisi tersebut
+    #   sudah termasuk didalamnya untuk menjalankan fungsi homomorphic() yang ada di
+    #   dalam program ini, ayang akan mengembalikan dilai dari path, subject, Hello. dimana
+    #   subject yang akan dighunakan sebagau nama foto (name file) yang mewakili jarak foto
+    #   tersebut
+    #
+    # --------------------------------------------------------------------------------
 
-        if (Hello == 1):
-            subject = "1-meter.jpg"
-            path += meter_1
-            logging.info("Menjalankan Program dengan jarak 1 meter")
-            homomorphic(path, subject, Hello,Hello_)
+    if (Hello == 1):
+        subject = "1-meter.jpg"
+        path += meter_1
+        logging.info("Menjalankan Program dengan jarak 1 meter")
+        homomorphic(path, subject, Hello, Hello_)
 
-        elif (Hello == 2):
-            subject = "60-meter.jpg"
-            path += meter_60
-            logging.info("Menjalankan Program dengan jarak 60 meter")
-            homomorphic(path, subject, Hello)
+    elif (Hello == 2):
+        subject = "60-meter.jpg"
+        path += meter_60
+        logging.info("Menjalankan Program dengan jarak 60 meter")
+        homomorphic(path, subject, Hello)
 
-        elif (Hello == 3):
-            subject = "100-meter.jpg"
-            path += meter_100
-            logging.info("Menjalankan Program dengan jarak 100 meter")
-            homomorphic(path, subject, Hello)
+    elif (Hello == 3):
+        subject = "100-meter.jpg"
+        path += meter_100
+        logging.info("Menjalankan Program dengan jarak 100 meter")
+        homomorphic(path, subject, Hello)
 
-        elif (Hello == 4):
-            subject = "150-meter.jpg"
-            path += meter_150
-            logging.info("Menjalankan Program dengan jarak 150 meter")
-            homomorphic(path, subject, Hello)
+    elif (Hello == 4):
+        subject = "150-meter.jpg"
+        path += meter_150
+        logging.info("Menjalankan Program dengan jarak 150 meter")
+        homomorphic(path, subject, Hello)
 
-        elif (Hello == 5):
-            logging.info("Clossing Program")
-            sys.exit()
+    elif (Hello == 5):
+        logging.info("Clossing Program")
+        sys.exit()
 
-        else:
-            print(" ERROR : must number :)")
+    else:
+        print(" ERROR : must number :)")
 
 
 # ---------------------------------- PENJELASAN ----------------------------------
@@ -190,33 +191,32 @@ def run_program(path):
 #   morfologi() pada kodingan ini
 # --------------------------------------------------------------------------------
 
-def homomorphic(path, subject,Hello,Hello_=False, path_save_homomorpic=path_save_homomorpic):
-
+def homomorphic(path, subject, Hello, Hello_=False, path_save_homomorpic=path_save_homomorpic):
     try:
-        if(Hello==1 & Hello_ ==2):
+        if (Hello == 1 & Hello_ == 2):
             masking(path)
-            img = cv2.imread(path)[:, :, 0]
-            logging.info("Berhasil Melakukan filtering HomomorphicFilter")
+            img = cv2.imread(path)
+            # logging.info("Berhasil Melakukan filtering HomomorphicFilter")
             path_save_homomorpic += subject
             cv2.imwrite(path_save_homomorpic, img)
             logging.info("Berhasil Menyimpan gambar filtering HomomorphicFilter pada : %s ", path_save_homomorpic)
             morfologi(path_save_homomorpic)
 
         else:
-            if(Hello==1):
+            if (Hello == 1):
                 masking(path)
-                img = cv2.imread(path)[:, :, 0]
-                logging.info("Berhasil Melakukan filtering HomomorphicFilter")
+                img = cv2.imread(path)
+                # logging.info("Berhasil Melakukan filtering HomomorphicFilter")
                 path_save_homomorpic += subject
                 cv2.imwrite(path_save_homomorpic, img)
                 logging.info("Berhasil Menyimpan gambar filtering HomomorphicFilter pada : %s ", path_save_homomorpic)
-                face_detector(path_save_homomorpic,subject)
+                face_detector(path_save_homomorpic, subject)
                 sys.exit()
 
-            if(Hello==4):
+            if (Hello == 4):
                 masking(path)
-                img = cv2.imread(path)[:, :, 0]
-                logging.info("Berhasil Melakukan filtering HomomorphicFilter")
+                img = cv2.imread(path)
+                # logging.info("Berhasil Melakukan filtering HomomorphicFilter")
                 path_save_homomorpic += subject
                 cv2.imwrite(path_save_homomorpic, img)
                 logging.info("Berhasil Menyimpan gambar filtering HomomorphicFilter pada : %s ", path_save_homomorpic)
@@ -224,18 +224,19 @@ def homomorphic(path, subject,Hello,Hello_=False, path_save_homomorpic=path_save
 
             else:
                 masking(path)
-                img = cv2.imread(path)[:, :, 0]
-                logging.info("Berhasil Melakukan filtering HomomorphicFilter")
+                img = cv2.imread(path)
+                # logging.info("Berhasil Melakukan filtering HomomorphicFilter")
                 path_save_homomorpic += subject
                 cv2.imwrite(path_save_homomorpic, img)
                 logging.info("Berhasil Menyimpan gambar filtering HomomorphicFilter pada : %s ", path_save_homomorpic)
 
                 logging.info("Memanggil fungsi Face Detector")
-                face_detector(path_save_homomorpic,subject)
-                #cv2.imwrite(path_save_homomorpic, img_filtered)
+                face_detector(path_save_homomorpic, subject)
+                # cv2.imwrite(path_save_homomorpic, img_filtered)
 
     except:
         logging.error("Error saat melakukan Filtering : %s", OSError)
+
 
 # ---------------------------------- PENJELASAN ----------------------------------
 #
@@ -249,7 +250,7 @@ def homomorphic(path, subject,Hello,Hello_=False, path_save_homomorpic=path_save
 #   gambar hasil deteksi wajah.
 #
 # --------------------------------------------------------------------------------
-def face_detector(path_save_homomorpic,subject, path_save_face_detection=path_save_face_detection):
+def face_detector(path_save_homomorpic, subject, path_save_face_detection=path_save_face_detection):
     crop = cv2.imread(path_save_homomorpic)
     imgGray = cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY)
     faces = detector(imgGray)
@@ -271,18 +272,18 @@ def face_detector(path_save_homomorpic,subject, path_save_face_detection=path_sa
         titik = cv2.convexHull(titik)
         faceBox = box(crop, titik)
 
-
         kotak = cv2.rectangle(crop, (x1, y1), (x2, y2), (0, 255, 255), 4)
         kotak_saja = kotak[y1:y2, x1:x2]
 
-        path_save_face_detection_box = path_save_face_detection+ "box-" + subject
-        path_save_face_detection_kotak = path_save_face_detection+ "box-full-" + subject
+        path_save_face_detection_box = path_save_face_detection + "box-" + subject
+        path_save_face_detection_kotak = path_save_face_detection + "box-full-" + subject
         path_save_face_detection += subject
-        cv2.imwrite(path_save_face_detection,faceBox)
-        cv2.imwrite(path_save_face_detection_box,kotak_saja)
+        cv2.imwrite(path_save_face_detection, faceBox)
+        cv2.imwrite(path_save_face_detection_box, kotak_saja)
         cv2.imwrite(path_save_face_detection_kotak, kotak)
         logging.info("Menyimpan hasil bounding box")
         morfologi(path_save_face_detection)
+
 
 # ---------------------------------- PENJELASAN ----------------------------------
 #
@@ -352,19 +353,18 @@ def morfologi(path_save_face_detection):
         cv2.imwrite("images/Masking/Masking3.png", src)
         show_ = mpimg.imread("images/Masking/Masking3.png")
 
-
         value = PSNR(img_masking_2, src)
-        if value == 100:
-            # print the output
+        if value != 100:
             plt.subplot(2, 2, 4)
             plt.imshow(show_)
-            plt.title('PSNR : %.2f, MSE : 0 ' %value)
+            plt.title('PSNR : %.2f, MSE : %s ' % (value[0], value[1]))
             plt.axis('off')
             logging.info("Menampilkan Morfologi Masking")
         else:
+            # print the output
             plt.subplot(2, 2, 4)
             plt.imshow(show_)
-            plt.title('PSNR : %.2f, MSE : %s ' %(value[0],value[1]))
+            plt.title('PSNR : %.2f, MSE : 0 ' % value)
             plt.axis('off')
             logging.info("Menampilkan Morfologi Masking")
 
@@ -411,7 +411,7 @@ def morfologi(path_save_face_detection):
             sys.exit()
 
 
-def box(img,titik, scale=5):
+def box(img, titik, scale=5):
     masking = np.zeros_like(img)
     masking = cv2.fillPoly(masking, [titik], (255, 255, 255))
     img = cv2.bitwise_and(img, masking)
@@ -421,6 +421,7 @@ def box(img,titik, scale=5):
     imgimg = img[y:y + h, x:x + w]
     imgimg = cv2.resize(imgimg, (0, 0), None, scale, scale)
     return imgimg
+
 
 def masking(path):
     try:
@@ -442,7 +443,7 @@ def masking(path):
             titik = np.array(titik)
             titik = cv2.convexHull(titik)
             faceBox = box(cv2.imread(path), titik)
-            cv2.imwrite("images/Masking/masking2.png",faceBox)
+            cv2.imwrite("images/Masking/masking2.png", faceBox)
     except:
         print("gagal prediksi wajah")
 
