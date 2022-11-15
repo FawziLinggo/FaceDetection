@@ -115,36 +115,36 @@ try:
 
 except Exception as e:
     print(e)
-    # img = cv2.imread(path,0)
-    # binr = cv2.threshold(img, 0, 255, cv2.THRESH_OTSU + cv2.THRESH_BINARY)[1]
-    # kernel = np.ones((7, 7), np.uint16)
-    # dilation = cv2.dilate(binr, kernel, iterations=7)
-    #
-    # plt.subplot(2, 2, 1)
-    # plt.imshow(binr, cmap='gray')
-    # plt.title('Threshold')
-    # plt.axis('off')
-    # print("Menampilkan Threshold Image")
-    #
-    # plt.subplot(2, 2, 2)
-    # plt.imshow(dilation, cmap='gray')
-    # plt.title('dilation')
-    # plt.axis('off')
-    # print("Menampilkan Morfologi dilation")
-    #
-    # kernel1 = np.ones((7, 7), np.uint16)
-    # closing = cv2.morphologyEx(dilation, cv2.MORPH_CLOSE, kernel1, iterations=1)
-    #
-    # # print the output
-    # plt.subplot(2, 2, 3)
-    # plt.imshow(closing, cmap='gray')
-    # plt.title('closing')
-    # plt.axis('off')
-    #
-    # plt.subplot(2, 2, 4)
-    # plt.title("gagal menentukan countur wajah", color='red')
-    # plt.axis('off')
-    #
-    # plt.show()
-    # print("Clossing Program")
-    # sys.exit()
+    img = cv2.imread(path,0)
+    binr = cv2.threshold(img, 0, 255, cv2.THRESH_OTSU + cv2.THRESH_BINARY)[1]
+    kernel = np.ones((7, 7), np.uint16)
+    dilation = cv2.dilate(binr, kernel, iterations=7)
+
+    plt.subplot(2, 2, 1)
+    plt.imshow(binr, cmap='gray')
+    plt.title('Threshold')
+    plt.axis('off')
+    print("Menampilkan Threshold Image")
+
+    plt.subplot(2, 2, 2)
+    plt.imshow(dilation, cmap='gray')
+    plt.title('dilation')
+    plt.axis('off')
+    print("Menampilkan Morfologi dilation")
+
+    kernel1 = np.ones((7, 7), np.uint16)
+    closing = cv2.morphologyEx(dilation, cv2.MORPH_CLOSE, kernel1, iterations=1)
+
+    # print the output
+    plt.subplot(2, 2, 3)
+    plt.imshow(closing, cmap='gray')
+    plt.title('closing')
+    plt.axis('off')
+
+    plt.subplot(2, 2, 4)
+    plt.title("gagal menentukan countur wajah", color='red')
+    plt.axis('off')
+
+    plt.show()
+    print("Clossing Program")
+    sys.exit()
