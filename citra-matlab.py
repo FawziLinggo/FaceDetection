@@ -7,15 +7,29 @@ import numpy as np
 import matplotlib.pyplot as plt
 from math import log10, sqrt
 
+try:
+    os.remove("images/Masking/masking2.png")
+except:
+    pass
+try:
+    os.remove("images/Masking/masking3.png")
+except:
+    pass
+try:
+    os.remove("images/Masking/masking.png")
+except:
+    pass
+
 detector = dlib.get_frontal_face_detector()
 lendmark_path = "model/shape_predictor_68_face_landmarks.dat"
 
-path = input("Enter Photo Path : \n ")
-# path="citra-matlab/1-meter/WhatsApp Image 2022-11-10 at 19.43.56.jpeg"
+# path = input("Enter Photo Path : \n ")
+path="citra-matlab/1-meter/WhatsApp Image 2022-11-10 at 19.43.56.jpeg"
 
 img = cv2.imread(path)
 faces = detector(img)
 predictor = dlib.shape_predictor(lendmark_path)
+
 
 
 def PSNR(original, compressed):
@@ -41,6 +55,8 @@ def box(img, titik, scale=5):
 
 try:
     for face in faces:
+        x1, y1 = face.left(), face.top()
+        x2, y2 = face.right(), face.bottom()
         landmarks = predictor(img, face)
         titik = []
         for n in range(68):
@@ -50,6 +66,8 @@ try:
 
         titik = np.array(titik)
         titik = cv2.convexHull(titik)
+        kotak = cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 255), 4)
+        cv2.imwrite("images/Masking/kotaksaja.png", kotak)
         faceBox = box(cv2.imread(path), titik)
         cv2.imwrite("images/Masking/masking2.png", faceBox)
 
@@ -110,7 +128,6 @@ try:
 
     plt.show()
     print("Clossing Program")
-    sys.exit()
 
 
 except Exception as e:
@@ -147,4 +164,3 @@ except Exception as e:
 
     plt.show()
     print("Clossing Program")
-    sys.exit()
