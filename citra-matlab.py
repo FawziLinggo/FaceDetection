@@ -23,8 +23,8 @@ except:
 detector = dlib.get_frontal_face_detector()
 lendmark_path = "model/shape_predictor_68_face_landmarks.dat"
 
-# path = input("Enter Photo Path : \n ")
-path="citra-matlab/1-meter/WhatsApp Image 2022-11-10 at 19.43.56.jpeg"
+path = input("Enter Photo Path : \n ")
+# path="citra-matlab/1-meter/WhatsApp Image 2022-11-10 at 19.43.56.jpeg"
 
 img = cv2.imread(path)
 faces = detector(img)
@@ -111,6 +111,7 @@ try:
     cv2.imwrite("images/Masking/Masking3.png", src)
     show_ = mpimg.imread("images/Masking/Masking3.png")
 
+    # value = PSNR(img_masking_2, src)
     value = PSNR(img_masking_2, src)
     if value == 100:
         # print the output
