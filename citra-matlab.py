@@ -8,23 +8,22 @@ import matplotlib.pyplot as plt
 from math import log10, sqrt
 
 try:
+    os.remove("images/Masking/kotaksaja.png")
+    os.remove("images/Masking/kotaksaja2.png")
+    os.remove("images/Masking/Masking.png")
     os.remove("images/Masking/masking2.png")
+    os.remove("images/Masking/Masking3.png")
+    print("File Masking dihapus")
 except:
-    pass
-try:
-    os.remove("images/Masking/masking3.png")
-except:
-    pass
-try:
-    os.remove("images/Masking/masking.png")
-except:
+    print("File Masking tidak ada")
     pass
 
 detector = dlib.get_frontal_face_detector()
 lendmark_path = "model/shape_predictor_68_face_landmarks.dat"
 
-path = input("Enter Photo Path : \n ")
-# path="citra-matlab/1-meter/WhatsApp Image 2022-11-10 at 19.43.56.jpeg"
+# path = input("Enter Photo Path : \n ")
+# path="/home/adi/PycharmProjects/FaceDetection-main/citra-matlab/0004_1_n HF size.jpg"
+path="/home/adi/PycharmProjects/FaceDetection-main/citra-vis/1-meter/0002_1_d.JPG"
 
 img = cv2.imread(path)
 faces = detector(img)
@@ -67,14 +66,16 @@ try:
         titik = np.array(titik)
         titik = cv2.convexHull(titik)
         kotak = cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 255), 4)
+        kotak_saja = kotak[y1:y2, x1:x2]
         cv2.imwrite("images/Masking/kotaksaja.png", kotak)
+        cv2.imwrite("images/Masking/kotaksaja2.png", kotak_saja)
         faceBox = box(cv2.imread(path), titik)
         cv2.imwrite("images/Masking/masking2.png", faceBox)
 
 
     img = cv2.imread("images/Masking/masking2.png", 0)
     binr = cv2.threshold(img, 0, 255, cv2.THRESH_OTSU + cv2.THRESH_BINARY)[1]
-    img_masking_2 = img
+    img_masking_2 = cv2.imread("images/Masking/kotaksaja2.png", 0)
     plt.figure(figsize=(8, 7))
     plt.subplot(2, 2, 1)
     plt.imshow(binr, cmap='gray')
